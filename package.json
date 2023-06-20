@@ -22,6 +22,7 @@
     "hardhat": "^2.15.0"
   },
   "dependencies": {
+    "@aave/protocol-v2": "^1.0.1",
     "@openzeppelin/contracts": "^4.9.2",
     "keccak256": "^1.0.6",
     "merkletreejs": "^0.3.10"
