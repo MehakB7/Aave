@@ -18,10 +18,7 @@ contract Escrow {
         beneficiary = _beneficiary;
         depositor = msg.sender;
         initialBalance =msg.value;
-
         gateway.depositETH{value: address(this).balance}(address(this), 0);
-        
-        
     }
 
     function approve() external {
