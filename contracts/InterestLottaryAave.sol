@@ -46,8 +46,11 @@ contract InterestLottartAava{
 		uint totalPurchasers = ticketPurchasers.length;
 		uint winnerIdx = uint(blockhash(block.number - 1)) % totalPurchasers;
 		address winner = ticketPurchasers[winnerIdx];
-
 		emit Winner(winner);
+
+        // transfer the dai to qinnwe
+
+        POOL.withdraw(address(dai),address(this), winner, type(uint).max);
 
      }
 
