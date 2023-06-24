@@ -12,6 +12,18 @@ contract CollatralPool {
     uint depositAmount = 10000e18;
     address[] members;
 
+    modifier onlyMembers() {
+        bool isMember = false;
+        for (uint i = 0; i < members.length; i++) {
+            if (members[i] == msg.sender) {
+                isMember = true;
+                break;
+            }
+        }
+        require(isMember);
+        _;
+    }
+
     constructor(address[] memory _members) {
         members = _members;
 
@@ -23,7 +35,7 @@ contract CollatralPool {
         pool.deposit(address(dai), balance, address(this), 0);
     }
 
-    function withdraw() external {
+    function withdraw() external onlyMembers {
         uint totalBalance = aDai.balanceOf(address(this));
         uint share = totalBalance / members.length;
         aDai.approve(address(pool), share);
@@ -33,7 +45,7 @@ contract CollatralPool {
         }
     }
 
-    function borrow(address asset, uint amount) external {
+    function borrow(address asset, uint amount) external onlyMembers {
         pool.borrow(asset, amount, 1, 0, address(this));
         (, , , , , uint heathFactor) = pool.getUserAccountData(address(this));
         require(heathFactor > 2e18);
