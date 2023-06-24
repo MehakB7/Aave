@@ -33,7 +33,16 @@ contract CollatralPool {
         }
     }
 
-    function borrow(address asset, uint amount) external {}
+    function borrow(address asset, uint amount) external {
+        pool.borrow(asset, amount, 1, 0, address(this));
+        (, , , , , uint heathFactor) = pool.getUserAccountData(address(this));
+        require(heathFactor > 2e18);
+        IERC20(asset).transfer(msg.sender, amount);
+    }
 
-    function repay(address asset, uint amount) external {}
+    function repay(address asset, uint amount) external {
+        IERC20(asset).transferFrom(msg.sender, address(this), amount);
+        IERC20(asset).approve(address(pool), amount);
+        pool.repay(asset, amount, 1, address(this));
+    }
 }
